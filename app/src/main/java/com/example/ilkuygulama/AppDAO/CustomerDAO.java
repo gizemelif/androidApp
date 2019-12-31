@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
+import com.example.ilkuygulama.Model.Customer;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +17,7 @@ public class CustomerDAO extends SQLiteOpenHelper {
     private static final String database_name = "bkTurizm";
     private static final int db_version = 1;
     private static final String tablo_kisiler = "Customer";
-    private static final String col_id = "id";
+    public static final String col_id = "id";
     private static final String col_name = "name";
     private static final String col_username = "username";
     private static final String col_surname = "surname";
@@ -48,21 +50,25 @@ public class CustomerDAO extends SQLiteOpenHelper {
         }catch (Exception e){}
         db.close();
     }
-    public List<String> veriListele(){
-        List<String> veriler = new ArrayList<String>();
+    public List<Customer> veriListele(){
+        // Bu kısımda List içerisindeki veri tipini oluşturduğun model sınıfı yazarsan verileri tutman daha kolay olur
+        List<Customer> veriler = new ArrayList<>();
+        Customer customer;
         SQLiteDatabase db = this.getReadableDatabase();
         try{
             String[] sutunlar = {col_id, col_username, col_name, col_surname,col_email, col_phoneNum, col_password};
             Cursor cursor = db.query(tablo_kisiler,sutunlar,null, null, null, null,null,
             null);
             while(cursor.moveToNext()){
-                veriler.add(cursor.getInt(0) + "-"
-                + cursor.getString(1) + "-"
-                + cursor.getString(2) + "-"
-                + cursor.getString(3) + "-"
-                + cursor.getString(4) + "-"
-                + cursor.getString(5) + "-"
-                +cursor.getString(6));
+                customer = new Customer();
+                customer.setId(cursor.getString(cursor.getColumnIndex(col_id)));
+                customer.setName(cursor.getString(cursor.getColumnIndex(col_name)));
+                customer.setSurname(cursor.getString(cursor.getColumnIndex(col_surname)));
+                customer.setUsername(cursor.getString(cursor.getColumnIndex(col_username)));
+                customer.setEmail(cursor.getString(cursor.getColumnIndex(col_email)));
+                customer.setPhone(cursor.getString(cursor.getColumnIndex(col_phoneNum)));
+                customer.setPassword(cursor.getString(cursor.getColumnIndex(col_password)));
+                veriler.add(customer);
             }
         }catch (Exception e){}
         db.close();
