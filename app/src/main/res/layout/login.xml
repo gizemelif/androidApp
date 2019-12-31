@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+    <TextView android:text = "BK TURIZM" android:layout_width="wrap_content"
+        android:layout_height = "wrap_content"
+        android:id = "@+id/textLogo"
+        android:textSize = "60dp"
+        android:layout_marginBottom="25dp"
+        android:layout_alignParentTop = "true"
+        android:layout_centerHorizontal = "true" />
+    <TextView android:text = "Giriş Yap" android:layout_width="wrap_content"
+        android:layout_height = "wrap_content"
+        android:id = "@+id/textview"
+        android:textSize = "30dp"
+        android:layout_below="@+id/textLogo"
+        android:layout_centerHorizontal = "true" />
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="Kullanıcı Adı"
+        android:ems="20"
+        android:id="@+id/etUsername"
+        android:layout_below="@+id/textview"
+        android:layout_marginTop="50dp"
+        android:layout_centerHorizontal="true" />
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:hint="Şifre"
+        android:ems="50"
+        android:layout_below="@+id/etUsername"
+        android:layout_alignEnd="@+id/etUsername"
+        android:id="@+id/etSifre" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/etSifre"
+            android:layout_marginLeft="150dp">
+            <Button
+                android:text="Giriş Yap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btnGiris"
+                android:layout_below="@+id/etSifre"
+                android:layout_toStartOf="@+id/etSifre"/>
+        </LinearLayout>
+
+
+</RelativeLayout>
