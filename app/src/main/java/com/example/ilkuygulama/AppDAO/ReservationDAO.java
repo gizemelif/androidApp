@@ -77,7 +77,6 @@ public class ReservationDAO extends SQLiteOpenHelper {
                 + col_endCity + " TEXT NOT NULL, "
                 + col_startTime +" DATE NOT NULL, "
                 + col_endTime +" DATE NOT NULL)");
-
     }
 
     @Override

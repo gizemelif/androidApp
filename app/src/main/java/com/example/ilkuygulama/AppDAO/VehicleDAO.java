@@ -21,7 +21,7 @@ public class VehicleDAO extends SQLiteOpenHelper {
     private static final String col_driver = "driverName";
     private static final String col_firstCity = "firstCity";
     private static final String col_endCity = "endCity"; //varış noktası
-    private static final Date col_startTime = Date.valueOf("startTime");
+    private static final Date col_startTime =  Date.valueOf("startTime");
     private static final Date col_endTime = Date.valueOf("endTime");
 
 

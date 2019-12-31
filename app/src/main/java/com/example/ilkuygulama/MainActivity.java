@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.ilkuygulama.AppDAO.CustomerDAO;
 import com.example.ilkuygulama.Model.Customer;
+import com.example.ilkuygulama.dao_entity.CustomerEntity;
 
 import java.util.List;
 
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity{
         btnKaydet.setOnClickListener( new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                CustomerDAO vt = new CustomerDAO(MainActivity.this);
+                CustomerEntity customerEntity = new CustomerEntity(MainActivity.this);
 
                 String username = etUsername.getText().toString();
                 String ad = etAd.getText().toString();
@@ -53,7 +54,7 @@ public class MainActivity extends AppCompatActivity{
                 String cepTel = PhoneNumberUtils.normalizeNumber(etCepTel.getText().toString());
                 String sifre = etSifre.getText().toString();
                 if( etUsername.length() != 0 || etAd.length() !=0 || etSoyad.length() != 0 || etEmail.length() != 0 || etCepTel.length() != 0 || etSifre.length() != 0 ){
-                    vt.veriEkle(username,ad,soyad,email,cepTel,sifre);
+                    customerEntity.addCustomer(username,ad,soyad,email,cepTel,sifre);
                     etUsername.setText("");
                     etAd.setText("");
                     etSoyad.setText("");
@@ -73,8 +74,9 @@ public class MainActivity extends AppCompatActivity{
     }
 
     public void Listele(){
-       CustomerDAO vt = new CustomerDAO(MainActivity.this);
-       List<Customer> liste = vt.veriListele();
+       BaseDao baseDao = new BaseDao(MainActivity.this);
+       CustomerEntity customerEntity = new CustomerEntity(MainActivity.this);
+       List<Customer> liste = customerEntity.getCustomers();
        // liste.get(0) şeklinde 0 yazan yere index numrasını yazarak ilgili veriye ulaşabilirsin.
        String a = "";
        /*ArrayAdapter<String> adapter = new ArrayAdapter<>(MainActivity.this,android.R.layout.simple_list_item_1, android.R.id.text1,liste);
