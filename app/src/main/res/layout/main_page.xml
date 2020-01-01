@@ -29,27 +29,32 @@
         android:layout_marginTop="60dp"
         android:textSize="35dp"
         android:text="Nereden?"/>
-    <TextView
-        android:id="@+id/txtCityList"
+
+    <Spinner
+        android:id="@+id/spinnerCity1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txtFromWhere"
         android:layout_alignStart="@+id/txtFromWhere"
         android:layout_marginTop="10dp"
-        android:textSize="35dp"
-        android:text="---"
-        android:clickable="true"/>
+        android:textSize="35dp"/>
 
     <TextView
         android:id="@+id/txtGidisTarihi"
         android:layout_width="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/txtCityList"
+        android:layout_below="@+id/spinnerCity1"
         android:layout_marginTop="60dp"
         android:textSize="35dp"
         android:text="Gidiş Tarihi"
         android:clickable="true"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tarih Seçin"
+        android:layout_below="@+id/txtGidisTarihi"
+        android:onClick="showDatePickerDialog" />
 
     <TextView
         android:id="@+id/txtToWhere"
@@ -61,27 +66,32 @@
         android:layout_marginTop="60dp"
         android:textSize="35dp"
         android:text="Nereye?"/>
-    <TextView
-        android:id="@+id/txtCityList2"
+    <Spinner
+        android:id="@+id/spinnerCity2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txtToWhere"
         android:layout_alignStart="@+id/txtToWhere"
         android:layout_marginTop="10dp"
-        android:textSize="35dp"
-        android:text="---"
-        android:clickable="true"/>
+        android:textSize="35dp"/>
     <TextView
         android:id="@+id/txtDonusTarihi"
         android:layout_width="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/txtCityList2"
+        android:layout_below="@+id/spinnerCity2"
         android:layout_marginTop="60dp"
         android:layout_marginLeft="30dp"
         android:textSize="35dp"
         android:text="Dönüş Tarihi"
         android:clickable="true"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tarih Seçin"
+        android:layout_below="@+id/txtDonusTarihi"
+        android:layout_alignParentRight="true"
+        android:onClick="showDatePickerDialog" />
 
 
 </RelativeLayout>

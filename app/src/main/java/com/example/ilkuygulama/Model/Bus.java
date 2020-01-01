@@ -1,7 +1,5 @@
 package com.example.ilkuygulama.Model;
 
-import java.util.Date;
-
 public class Bus {
     private int id;
     private String plate;
@@ -9,8 +7,8 @@ public class Bus {
     private static final Integer passengerCapacity = 5;
     private String startCity;
     private String endCity;
-    private Date startTime;
-    private Date endTime;
+    private String startTime;
+    private String endTime;
 
     public String getStartCity() {
         return startCity;
@@ -28,19 +26,23 @@ public class Bus {
         this.endCity = endCity;
     }
 
-    public Date getStartTime() {
+    public static Integer getPassengerCapacity() {
+        return passengerCapacity;
+    }
+
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public Date getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 

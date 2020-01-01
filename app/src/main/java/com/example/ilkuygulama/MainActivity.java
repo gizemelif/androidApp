@@ -1,94 +1,94 @@
 package com.example.ilkuygulama;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
 import android.os.Bundle;
 import android.telephony.PhoneNumberUtils;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
-
-import com.example.ilkuygulama.AppDAO.CustomerDAO;
 import com.example.ilkuygulama.Model.Customer;
+import com.example.ilkuygulama.Model.DatePickerFragment;
 import com.example.ilkuygulama.dao_entity.CustomerEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity{
-    private EditText etUsername, etAd, etSoyad, etEmail, etCepTel, etSifre;
-    private Button btnKaydet;
+    private String[] citiesStart={"İSTANBUL","ANKARA","İZMİR","ESKİŞEHİR","ADANA","TEKİRDAĞ","ANTALYA","MANİSA","KONYA","ORDU"};
+    private String[] citiesEnd={"İSTANBUL","ANKARA","İZMİR","ESKİŞEHİR","ADANA","TEKİRDAĞ","ANTALYA","MANİSA","KONYA","ORDU"};
 
-   @Override
-    public void onCreate(Bundle savedIntstanceState){
-       super.onCreate(savedIntstanceState);
-       setContentView(R.layout.sign_up);
-       // onCreate içerisini mümkün olduğunca boş bırakmak lazım
-       init();
-       saveUser();
-       Listele();
-   }
+    //Spinner'ları ve Adapter'lerini tanımlıyoruz.
+    private Spinner spinner1;
+    private Spinner spinner2;
+    private ArrayAdapter<String> dataAdapterForCities1;
+    private ArrayAdapter<String> dataAdapterForCities2;
 
-    private void init() {
-        etUsername = (EditText) findViewById(R.id.etUsername);
-        etAd = (EditText) findViewById(R.id.etAd);
-        etSoyad = (EditText) findViewById(R.id.etSoyad);
-        etEmail = (EditText) findViewById(R.id.etEmail);
-        etCepTel = (EditText) findViewById(R.id.etTel);
-        etSifre = (EditText) findViewById(R.id.etSifre);
-        btnKaydet = (Button) findViewById(R.id.btnKaydet);
-    }
+    @Override // Bu metod uygulama açıldığında çalıştırılan metod.
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.main_page);
 
-    private void saveUser() {
-        btnKaydet.setOnClickListener( new View.OnClickListener(){
+        //xml kısmında hazırladığımğız spinnerları burda tanımladıklarımızla eşleştiriyoruz.
+        spinner1 = (Spinner) findViewById(R.id.spinnerCity1);
+        spinner2 = (Spinner) findViewById(R.id.spinnerCity2);
+
+        //Spinner'lar için adapterleri hazırlıyoruz.
+        dataAdapterForCities1 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, citiesStart);
+        dataAdapterForCities2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,citiesEnd);
+
+        //Listelenecek verilerin görünümünü belirliyoruz.
+        dataAdapterForCities1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dataAdapterForCities2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        //Hazırladğımız Adapter'leri Spinner'lara ekliyoruz.
+        spinner1.setAdapter(dataAdapterForCities1);
+        spinner2.setAdapter(dataAdapterForCities2);
+
+        // Listelerden bir eleman seçildiğinde yapılacakları tanımlıyoruz.
+        spinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
             @Override
-            public void onClick(View v){
-                CustomerEntity customerEntity = new CustomerEntity(MainActivity.this);
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+                //Hangi il seçilmişse onun ilçeleri adapter'e ekleniyor.
+                for(int i=0; i < citiesStart.length; i++)
+                if(parent.getSelectedItem().toString().equals(citiesStart[i]))
+                    dataAdapterForCities1 = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_item,citiesStart);
+                else if(parent.getSelectedItem().toString().equals(citiesEnd[1]))
+                    dataAdapterForCities2 = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_item,ilceler1);
 
-                String username = etUsername.getText().toString();
-                String ad = etAd.getText().toString();
-                String soyad = etSoyad.getText().toString();
-                String email = etEmail.getText().toString();
-                String cepTel = PhoneNumberUtils.normalizeNumber(etCepTel.getText().toString());
-                String sifre = etSifre.getText().toString();
-                if( etUsername.length() != 0 || etAd.length() !=0 || etSoyad.length() != 0 || etEmail.length() != 0 || etCepTel.length() != 0 || etSifre.length() != 0 ){
-                    customerEntity.addCustomer(username,ad,soyad,email,cepTel,sifre);
-                    etUsername.setText("");
-                    etAd.setText("");
-                    etSoyad.setText("");
-                    etEmail.setText("");
-                    etCepTel.setText("");
-                    etSifre.setText("");
-                }else{
-                    showToast("Lütfen tüm alanları doldurunuz !");
-                }
-                if(btnKaydet.isPressed()){
-                    showToast("Doğrulama emailindeki linke tıklayarak işlemi tamalayınız.");
-                }
+                dataAdapterForCities2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner1.setAdapter(dataAdapterForCities1);
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
 
+        spinnerIlceler.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+                //Seçilen il ve ilçeyi ekranda gösteriyoruz.
+                Toast.makeText(getBaseContext(), ""+spinnerIller.getSelectedItem().toString()+"n"+parent.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {
             }
         });
     }
-
-    public void Listele(){
-       BaseDao baseDao = new BaseDao(MainActivity.this);
-       CustomerEntity customerEntity = new CustomerEntity(MainActivity.this);
-       List<Customer> liste = customerEntity.getCustomers();
-       // liste.get(0) şeklinde 0 yazan yere index numrasını yazarak ilgili veriye ulaşabilirsin.
-       String a = "";
-       /*ArrayAdapter<String> adapter = new ArrayAdapter<>(MainActivity.this,android.R.layout.simple_list_item_1, android.R.id.text1,liste);
-       listView.setAdapter(adapter);*/
-   }
-
-   //Kullanıcı kayıt olduktan sonra mailini kontrol etmesi için mesaj gelir.
-   public void showToast(String message){
-       Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG);
-       toast.setGravity(Gravity.CENTER|Gravity.LEFT,0,0);
-       toast.show();
-
-
+   public void showDatePickerDialog(View v){
+       DialogFragment fragment = new DatePickerFragment();
+       fragment.show(getSupportFragmentManager(), "datePicker");
    }
 }

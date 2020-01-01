@@ -4,17 +4,14 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-
 import androidx.annotation.Nullable;
-
 import com.example.ilkuygulama.BaseDao;
 import com.example.ilkuygulama.Model.Reservation;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class ReservationEntity extends BaseDao {
-    public static String table_reservation = "ReservationEntity";
+    public static final String table_reservation = "ReservationEntity";
     public static final String col_id = "id";
     public static final String col_username = "username";
     public static final String col_plate = "plate";
@@ -35,18 +32,20 @@ public class ReservationEntity extends BaseDao {
             cv.put(col_plate, plaka);
             cv.put(col_firstCity, firstCity);
             cv.put(col_endCity, endCity);
+            cv.put(col_startTime, startTime);
+            cv.put(col_endTime, endTime);
 
             db.insert(table_reservation, null, cv);
         }catch (Exception e){}
         db.close();
     }
 
-    public List<Reservation> getVehicleList(){
+    public List<Reservation> getReservations(){
         List<Reservation> veriler = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
         try{
-            String[] list = {col_id, col_username, col_plate, col_firstCity, col_endCity};
+            String[] list = {col_id, col_username, col_plate, col_firstCity, col_endCity, col_startTime, col_endTime};
             Cursor cursor = db.query(table_reservation,list,null,null,null,null,null);
 
             while(cursor.moveToNext()){
@@ -56,6 +55,8 @@ public class ReservationEntity extends BaseDao {
                 reservation.setUsername(cursor.getString(cursor.getColumnIndex(ReservationEntity.col_username)));
                 reservation.setFirstCity(cursor.getString(cursor.getColumnIndex(ReservationEntity.col_firstCity)));
                 reservation.setEndCity(cursor.getString(cursor.getColumnIndex(ReservationEntity.col_endCity)));
+                reservation.setStartTime(cursor.getString(cursor.getColumnIndex(ReservationEntity.col_startTime)));
+                reservation.setEndTime(cursor.getString(cursor.getColumnIndex(ReservationEntity.col_endTime)));
                 veriler.add(reservation);
             }
 
