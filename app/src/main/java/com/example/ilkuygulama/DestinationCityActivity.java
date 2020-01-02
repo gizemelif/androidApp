@@ -2,7 +2,6 @@ package com.example.ilkuygulama;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -12,28 +11,42 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.example.ilkuygulama.interfaces.CityEndCallback;
-import com.example.ilkuygulama.interfaces.DestinationCitySetCallback;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class DestinationCityActivity extends AppCompatActivity implements DestinationCitySetCallback {
+public class DestinationCityActivity extends AppCompatActivity {
 
-    public static List<String> citiesEnd;
-    public static ListView cityList;
+    public static ListView cityListView;
     private ImageButton btnBack;
-    private CityEndCallback cityEndCallback;
-
-    private static int startPosition;
-
+    public CityEndCallback cityEndCallback;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_destination_city);
 
         init();
+        setCityList();
         selectCity();
         goToMainActivity();
+    }
+
+    private void init() {
+        cityListView = findViewById(R.id.cityList);
+        btnBack = findViewById(R.id.btnBack);
+        cityEndCallback = new MainActivity();
+    }
+
+    private void setCityList() {
+        Intent intent = getIntent();
+        String cityStart = intent.getStringExtra("cityStart");
+        List<String> cityList = intent.getStringArrayListExtra("cityList");
+        int position = intent.getIntExtra("position",-1);
+        if(position != -1){
+            cityList.remove(position);
+        }
+        ArrayAdapter<String> dataAdaptor = new ArrayAdapter<String>
+                (DestinationCityActivity.this, android.R.layout.simple_list_item_1, android.R.id.text1, cityList);
+        cityListView.setAdapter(dataAdaptor);
     }
 
     private void goToMainActivity() {
@@ -46,7 +59,7 @@ public class DestinationCityActivity extends AppCompatActivity implements Destin
     }
 
     private void selectCity() {
-        cityList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        cityListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String cityEnd = parent.getItemAtPosition(position).toString();
@@ -56,27 +69,4 @@ public class DestinationCityActivity extends AppCompatActivity implements Destin
         });
     }
 
-    private void setCityToListView(Context context) {
-        if (startPosition != -1) {
-            citiesEnd.remove(startPosition);
-        }
-        ArrayAdapter<String> veriAdaptoru = new ArrayAdapter<String>
-                (context, android.R.layout.simple_list_item_1, android.R.id.text1, citiesEnd);
-        cityList.setAdapter(veriAdaptoru);
-    }
-
-    private void init() {
-        cityList = findViewById(R.id.cityList);
-        btnBack = findViewById(R.id.btnBack);
-        cityEndCallback = new MainActivity();
-
-        citiesEnd = new ArrayList<>();
-    }
-
-    @Override
-    public void onSetDestinationCity(String cityStart, int position, List<String> citiesStart,Context context) {
-        startPosition = position;
-        citiesEnd = citiesStart;
-        setCityToListView(context);
-    }
 }

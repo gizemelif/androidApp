@@ -28,6 +28,12 @@ public class CurrentCityActivity extends AppCompatActivity {
         goToMainActivity();
     }
 
+    private void init() {
+        cityList = findViewById(R.id.cityList);
+        btnBack = findViewById(R.id.btnBack);
+        cityCallback = new MainActivity();
+    }
+
     private void goToMainActivity() {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,11 +62,5 @@ public class CurrentCityActivity extends AppCompatActivity {
 
         //(C) adımı
         cityList.setAdapter(veriAdaptoru);
-    }
-
-    private void init() {
-        cityList = findViewById(R.id.cityList);
-        btnBack = findViewById(R.id.btnBack);
-        cityCallback = new MainActivity();
     }
 }

@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import com.example.ilkuygulama.interfaces.CityStartCallback;
 import com.example.ilkuygulama.interfaces.CityEndCallback;
-import com.example.ilkuygulama.interfaces.DestinationCitySetCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +25,6 @@ public class MainActivity extends AppCompatActivity implements CityStartCallback
     private static String destCity ="";
     private static String currentCity ="";
     private static int startPsitionIndex = -1;
-    private DestinationCitySetCallback destinationCitySetCallback ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,11 +35,36 @@ public class MainActivity extends AppCompatActivity implements CityStartCallback
         setCity();
         goToDestination();
         goToCurrent();
+
+    }
+
+    private void init() {
+        currentLayout = findViewById(R.id.currentLayout);
+        destinationLayout = findViewById(R.id.destinationLayout);
+
+        txtFrom = findViewById(R.id.txtFrom);
+        txtTo = findViewById(R.id.txtTo);
+
+        citiesStart = new ArrayList<>();
+        citiesStart.add("İSTANBUL");
+        citiesStart.add("ANKARA");
+        citiesStart.add("İZMİR");
+        citiesStart.add("ESKİŞEHİR");
+        citiesStart.add("ADANA");
+        citiesStart.add("TEKİRDAĞ");
+        citiesStart.add("ANTALYA");
+        citiesStart.add("MANİSA");
+        citiesStart.add("KONYA");
+        citiesStart.add("ORDU");
+
     }
 
     private void setCity() {
         if(currentCity != null && !currentCity.isEmpty()){
             txtFrom.setText(currentCity);
+            if(destCity.isEmpty()){
+                txtTo.setText("Nereye ?");
+            }
         }
         if(destCity != null && !destCity.isEmpty()){
             txtTo.setText(destCity);
@@ -65,38 +88,20 @@ public class MainActivity extends AppCompatActivity implements CityStartCallback
                     Toast.makeText(MainActivity.this, "Öncelikle konum şehrinizi seçiniz.", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                destinationCitySetCallback.onSetDestinationCity(currentCity,startPsitionIndex,citiesStart,MainActivity.this);
-                startActivity(new Intent(MainActivity.this,DestinationCityActivity.class));
+                Intent intent = new Intent(MainActivity.this,DestinationCityActivity.class);
+                intent.putExtra("cityStart",currentCity);
+                intent.putStringArrayListExtra("cityList", (ArrayList<String>) citiesStart);
+                intent.putExtra("position",startPsitionIndex);
+                startActivity(intent);
             }
         });
-    }
-
-    private void init() {
-        currentLayout = findViewById(R.id.currentLayout);
-        destinationLayout = findViewById(R.id.destinationLayout);
-
-        txtFrom = findViewById(R.id.txtFrom);
-        txtTo = findViewById(R.id.txtTo);
-
-        citiesStart = new ArrayList<>();
-        citiesStart.add("İSTANBUL");
-        citiesStart.add("ANKARA");
-        citiesStart.add("İZMİR");
-        citiesStart.add("ESKİŞEHİR");
-        citiesStart.add("ADANA");
-        citiesStart.add("TEKİRDAĞ");
-        citiesStart.add("ANTALYA");
-        citiesStart.add("MANİSA");
-        citiesStart.add("KONYA");
-        citiesStart.add("ORDU");
-
-        destinationCitySetCallback = new DestinationCityActivity();
     }
 
     @Override
     public void onStartPosition(String startCity,int position) {
         currentCity = startCity;
         startPsitionIndex = position;
+        destCity = "";
     }
 
     @Override
