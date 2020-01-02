@@ -6,10 +6,10 @@ public class Reservation {
     private String id;
     private String username;
     private String plate;
-    private String startCity;
+    private String firstCity;
     private String endCity; //varış noktası
-    private Date startTime;
-    private Date endTime;
+    private String startTime;
+    private String endTime;
 
     public String getId() {
         return id;
@@ -35,12 +35,12 @@ public class Reservation {
         this.plate = plate;
     }
 
-    public String getStartCity() {
-        return startCity;
+    public String getFirstCity() {
+        return firstCity;
     }
 
-    public void setStartCity(String startCity) {
-        this.startCity = startCity;
+    public void setFirstCity(String firstCity) {
+        this.firstCity = firstCity;
     }
 
     public String getEndCity() {
@@ -51,19 +51,19 @@ public class Reservation {
         this.endCity = endCity;
     }
 
-    public Date getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public Date getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 }

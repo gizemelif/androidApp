@@ -2,78 +2,109 @@ package com.example.ilkuygulama;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.telephony.PhoneNumberUtils;
-import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.ilkuygulama.AppDAO.CustomerDAO;
+import com.example.ilkuygulama.interfaces.CityStartCallback;
+import com.example.ilkuygulama.interfaces.CityEndCallback;
 
-public class MainActivity extends AppCompatActivity{
-    private EditText etUsername, etAd, etSoyad, etEmail, etCepTel, etSifre;
-    private Button btnKaydet;
+import java.util.ArrayList;
+import java.util.List;
 
-   @Override
-    public void onCreate(Bundle savedIntstanceState){
-       super.onCreate(savedIntstanceState);
-       setContentView(R.layout.sign_up);
+public class MainActivity extends AppCompatActivity implements CityStartCallback, CityEndCallback {
+    private static List<String> citiesStart;
 
-       etUsername = (EditText) findViewById(R.id.etUsername);
-       etAd = (EditText) findViewById(R.id.etAd);
-       etSoyad = (EditText) findViewById(R.id.etSoyad);
-       etEmail = (EditText) findViewById(R.id.etEmail);
-       etCepTel = (EditText) findViewById(R.id.etTel);
-       etSifre = (EditText) findViewById(R.id.etSifre);
-       btnKaydet = (Button) findViewById(R.id.btnKaydet);
+    private LinearLayout currentLayout,destinationLayout;
 
-       btnKaydet.setOnClickListener( new View.OnClickListener(){
-           @Override
-           public void onClick(View v){
-               CustomerDAO vt = new CustomerDAO(MainActivity.this);
+    private static TextView txtTo,txtFrom;
+    private static String destCity ="";
+    private static String currentCity ="";
+    private static int startPsitionIndex = -1;
 
-               String username = etUsername.getText().toString();
-               String ad = etAd.getText().toString();
-               String soyad = etSoyad.getText().toString();
-               String email = etEmail.getText().toString();
-               String cepTel = PhoneNumberUtils.normalizeNumber(etCepTel.getText().toString());
-               String sifre = etSifre.getText().toString();
-               if( etUsername.length() != 0 || etAd.length() !=0 || etSoyad.length() != 0 || etEmail.length() != 0 || etCepTel.length() != 0 || etSifre.length() != 0 ){
-                   vt.veriEkle(username,ad,soyad,email,cepTel,sifre);
-                   etUsername.setText("");
-                   etAd.setText("");
-                   etSoyad.setText("");
-                   etEmail.setText("");
-                   etCepTel.setText("");
-                   etSifre.setText("");
-               }else{
-                   showToast("Lütfen tüm alanları doldurunuz !");
-               }
-               if(btnKaydet.isPressed()){
-                   showToast("Doğrulama emailindeki linke tıklayarak işlemi tamalayınız.");
-               }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.main_page);
 
+        init();
+        setCity();
+        goToDestination();
+        goToCurrent();
 
-           }
-       });
+    }
 
-   }
-   /*
-   public void Listele(){
-       CustomerDAO vt = new CustomerDAO(MainActivity.this);
-       List<String> liste = vt.veriListele();
-       ArrayAdapter<String> adapter = new ArrayAdapter<>(MainActivity.this,android.R.layout.simple_list_item_1, android.R.id.text1,liste);
-       listView.setAdapter(adapter);
-   }*/
+    private void init() {
+        currentLayout = findViewById(R.id.currentLayout);
+        destinationLayout = findViewById(R.id.destinationLayout);
 
-   //Kullanıcı kayıt olduktan sonra mailini kontrol etmesi için mesaj gelir.
-   public void showToast(String message){
-       Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG);
-       toast.setGravity(Gravity.CENTER|Gravity.LEFT,0,0);
-       toast.show();
+        txtFrom = findViewById(R.id.txtFrom);
+        txtTo = findViewById(R.id.txtTo);
 
+        citiesStart = new ArrayList<>();
+        citiesStart.add("İSTANBUL");
+        citiesStart.add("ANKARA");
+        citiesStart.add("İZMİR");
+        citiesStart.add("ESKİŞEHİR");
+        citiesStart.add("ADANA");
+        citiesStart.add("TEKİRDAĞ");
+        citiesStart.add("ANTALYA");
+        citiesStart.add("MANİSA");
+        citiesStart.add("KONYA");
+        citiesStart.add("ORDU");
 
-   }
+    }
+
+    private void setCity() {
+        if(currentCity != null && !currentCity.isEmpty()){
+            txtFrom.setText(currentCity);
+            if(destCity.isEmpty()){
+                txtTo.setText("Nereye ?");
+            }
+        }
+        if(destCity != null && !destCity.isEmpty()){
+            txtTo.setText(destCity);
+        }
+    }
+
+    private void goToCurrent() {
+        currentLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,CurrentCityActivity.class));
+            }
+        });
+    }
+
+    private void goToDestination() {
+        destinationLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(currentCity.isEmpty()){
+                    Toast.makeText(MainActivity.this, "Öncelikle konum şehrinizi seçiniz.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Intent intent = new Intent(MainActivity.this,DestinationCityActivity.class);
+                intent.putExtra("cityStart",currentCity);
+                intent.putStringArrayListExtra("cityList", (ArrayList<String>) citiesStart);
+                intent.putExtra("position",startPsitionIndex);
+                startActivity(intent);
+            }
+        });
+    }
+
+    @Override
+    public void onStartPosition(String startCity,int position) {
+        currentCity = startCity;
+        startPsitionIndex = position;
+        destCity = "";
+    }
+
+    @Override
+    public void onEndPosition(String endCity) {
+        destCity = endCity;
+    }
 }
