@@ -21,7 +21,6 @@ public class MainActivity extends AppCompatActivity implements CityStartCallback
     private LinearLayout currentLayout,destinationLayout;
 
     private static TextView txtTo,txtFrom;
-
     private static String destCity ="";
     private static String currentCity ="";
     private static int startPsitionIndex = -1;

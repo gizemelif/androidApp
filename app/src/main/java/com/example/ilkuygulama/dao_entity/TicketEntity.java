@@ -21,7 +21,7 @@ public class TicketEntity extends BaseDao {
         super(context);
     }
 
-    public void addCustomer(String username, String ad, String seatNum, String startCity, String endCity){
+    public void addTicket(String username, String ad, String seatNum, String startCity, String endCity){
         SQLiteDatabase db = this.getWritableDatabase();
         try{
             ContentValues cv = new ContentValues();
